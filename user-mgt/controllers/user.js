@@ -75,6 +75,24 @@ router.get('/delete/:id', (req, res)=>{
 });
 
 router.post('/delete/:id', (req, res)=>{
+	var user=req.session.userlist
+	user.forEach( function(std,i){
+		if(req.params.id == std[0]){
+			console.log(user[i][0])
+			console.log(user[i][1])
+			console.log(user[i][2])
+			console.log(user[i][3])
+			user[i][0] = '' ;
+			user[i][1] = '' ;
+			user[i][2] = '';
+			user[i][3] = '';
+			console.log(user[i][0])
+			console.log(user[i][1])
+			console.log(user[i][2])
+			console.log(user[i][3])
+		}
+	});
+		req.session.userlist = user;
 	
 		res.redirect('/home/userlist');
 	
