@@ -28,7 +28,12 @@ router.post('/create', (req, res)=>{
 });
 
 router.get('/edit/:id', (req, res)=>{
-
+	var user=''
+	req.session.userlist.forEach( function(std){
+		if(req.params.id == std[0]){
+			 user = {username :std[1] , email: std[2] , password: std[3]}
+		}
+	});
 		res.render('user/edit', user);
 	
 	
@@ -46,7 +51,7 @@ router.get('/delete/:id', (req, res)=>{
 	var user=''
 		req.session.userlist.forEach( function(std){
 			if(req.params.id == std[0]){
-				 user = {username :std[1] , password: std[2] ,email: std[3]}
+				 user = {username :std[1] , email: std[2] , password: std[3]}
 			}
 		});
 		res.render('user/delete', user);
