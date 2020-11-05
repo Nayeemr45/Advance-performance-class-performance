@@ -1,43 +1,21 @@
 const express 	= require('express');
 const router 	= express.Router();
 
-router.get('/', (req, res)=>{
-	
-	/*if(req.session.uname != ""){
-		res.render('home/index', {name: 'alamin', id:'123'});		
-	}else{
+router.get('*',  (req, res, next)=>{
+	if(req.cookies['uname'] == null){
 		res.redirect('/login');
-	}*/
-
-	if(req.cookies['uname'] != null){
-		res.render('home/index', {name: req.cookies['uname'], id:'123'});		
 	}else{
-		res.redirect('/login');
+		next();
 	}
+});
+
+router.get('/', (req, res)=>{
+	res.render('home/index', {name: req.cookies['uname'], id:'12'});
 });
 
 
 router.get('/userlist', (req, res)=>{
-
-	if(req.cookies['uname'] != ""){
-
-		var students = [
-			['1', 'alamin', 'abc@gmail.com', '1243'],
-			['2', 'pqr', 'pqr@gmail.com', '1243'],
-			['3', 'xyz', 'xyz@gmail.com', '1243']
-		];
-
-		//var data = {users: students};
-		res.render('home/userlist', {users: students});		
-	}else{
-		res.redirect('/login');
-	}
+	res.render('home/userlist', {users: req.session.userlist});
 })
 
 module.exports = router;
-
-//url design eg. /logout -> get or post request
-//adding middleware to app.js
-//creating controller/router  eg. router.get(), router.post()
-//creating VIEWS
-//sending response -> json, ejs

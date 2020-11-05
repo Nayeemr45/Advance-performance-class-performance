@@ -1,59 +1,63 @@
 const express 	= require('express');
 const router 	= express.Router();
+var id=0;
+
+router.get('*',  (req, res, next)=>{
+	if(req.cookies['uname'] == null){
+		res.redirect('/login');
+	}else{
+		next();
+	}
+});
 
 router.get('/create', (req, res)=>{
-	
-	if(req.cookies['uname'] != ""){
-		res.render('user/create');
-	}else{
-		res.redirect('/login');
-	}
+	res.render('user/create');
 });
 
 router.post('/create', (req, res)=>{
+		var user = [++req.session.userid,req.body.username, req.body.password, req.body.email];
+		console.log(user);
+		var newlist = req.session.userlist;
+		newlist.push(user);
+		console.log(newlist);
+		req.session.userlist = newlist;
+
+		res.redirect('/home/userlist');		
+
 	
-	if(req.cookies['uname'] != ""){
-		res.send('success');
-	}else{
-		res.redirect('/login');
-	}
 });
 
-router.get('/edit', (req, res)=>{
+router.get('/edit/:id', (req, res)=>{
+
+		res.render('user/edit', user);
 	
-	if(req.cookies['uname'] != ""){
-		res.render('user/edit');
-	}else{
-		res.redirect('/login');
-	}
+	
 });
 
-router.post('/edit', (req, res)=>{
+router.post('/edit/:id', (req, res)=>{
 	
-	if(req.cookies['uname'] != ""){
-		res.send('updated');
-	}else{
-		res.redirect('/login');
-	}
+	
+		res.redirect('/home/userlist');
+
 });
 
-router.get('/delete', (req, res)=>{
+router.get('/delete/:id', (req, res)=>{
 	
-	if(req.cookies['uname'] != ""){
-		var user = {username: 'alamin', password: '123', email: 'email@gmail.com'};
+	var user=''
+		req.session.userlist.forEach( function(std){
+			if(req.params.id == std[0]){
+				 user = {username :std[1] , password: std[2] ,email: std[3]}
+			}
+		});
 		res.render('user/delete', user);
-	}else{
-		res.redirect('/login');
-	}
+	
 });
 
-router.post('/delete', (req, res)=>{
+router.post('/delete/:id', (req, res)=>{
 	
-	if(req.cookies['uname'] != ""){
-		res.send('done!');
-	}else{
-		res.redirect('/login');
-	}
+		res.redirect('/home/userlist');
+	
 });
 
 module.exports = router;
+

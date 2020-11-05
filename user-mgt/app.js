@@ -31,5 +31,5 @@ app.get('/', (req, res)=>{
 
 //server startup
 app.listen(port, (error)=>{
-	console.log('server strated at '+port+' port');
+	console.log('server strated at '+port);
 });
